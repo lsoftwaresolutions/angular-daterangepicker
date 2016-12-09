@@ -133,11 +133,22 @@
           el.daterangepicker(angular.extend(opts, {
             autoUpdateInput: false
           }), function(start, end) {
-            return $scope.$apply(function() {
+            $scope.$apply(function() {
               return $scope.model = opts.singleDatePicker ? start : {
                 startDate: start,
                 endDate: end
               };
+            });
+            return $scope.$apply(function() {
+              var i, len, listener, ref, results;
+              modelCtrl.$commitViewValue($scope.model);
+              ref = modelCtrl.$viewChangeListeners;
+              results = [];
+              for (i = 0, len = ref.length; i < len; i++) {
+                listener = ref[i];
+                results.push(listener());
+              }
+              return results;
             });
           });
           _picker = el.data('daterangepicker');
@@ -189,11 +200,22 @@
             _init();
             if (newClearable) {
               return el.on('cancel.daterangepicker', function() {
-                return $scope.$apply(function() {
+                $scope.$apply(function() {
                   return $scope.model = opts.singleDatePicker ? null : {
                     startDate: null,
                     endDate: null
                   };
+                });
+                return $scope.$apply(function() {
+                  var i, len, listener, ref, results;
+                  modelCtrl.$commitViewValue($scope.model);
+                  ref = modelCtrl.$viewChangeListeners;
+                  results = [];
+                  for (i = 0, len = ref.length; i < len; i++) {
+                    listener = ref[i];
+                    results.push(listener());
+                  }
+                  return results;
                 });
               });
             }
